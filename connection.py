@@ -18,7 +18,13 @@ def home():
 
 @app.route('/students')
 def students():
-    return render_template("students.html")
+    id = request.form['id']
+    cursor = mysql.connection.cursor()
+    string = "SELECT * FROM goaUser WHERE UserID = %s ;"
+    cursor.execute(string, (id))
+    fetchdata = cursor.fetchall()
+    cursor.close()
+    return render_template("students.html", data = fetchdata)
 
 
 if __name__ == "__main__":
