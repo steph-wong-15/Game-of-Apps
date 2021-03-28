@@ -12,7 +12,7 @@ mysql = MySQL(app)
 
 
 @app.route("/")
-def searchPage():
+def homePage():
     return render_template("home.html")
 
 @app.route('/students')
@@ -20,7 +20,7 @@ def students():
     return render_template("students.html")
 
 @app.route('/student_profile', methods=['GET', 'POST'])
-def search():
+def studentProfile():
     id = request.form['id']
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaUser WHERE UserID = %s ;"
