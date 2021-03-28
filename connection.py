@@ -1,23 +1,22 @@
 from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
 
- 
 app = Flask(__name__)
- 
+
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = 'goa'
- 
+
 mysql = MySQL(app)
+
 
 @app.route("/")
 def searchPage():
     return render_template("home.html")
 
 
-
-@app.route("/students", methods = ['GET','POST'])
+@app.route("/student_profile", methods=['GET', 'POST'])
 def search():
     id = request.form['id']
     cursor = mysql.get_db().cursor()
@@ -25,10 +24,8 @@ def search():
     cursor.execute(string, (id))
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("students.html", data = fetchdata)
-
+    return render_template("student_profile.html", data=fetchdata)
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
- 
+    app.run(debug=True)
