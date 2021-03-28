@@ -29,6 +29,14 @@ def studentProfile():
     cursor.close()
     return render_template("student_profile.html", data=fetchdata)
 
+@app.route('/teams',  methods=['GET', 'POST'])
+def teams():
+	cursor = mysql.get_db().cursor()
+	string = "SELECT * FROM team;"
+	cursor.execute(string)
+	fetchdata = cursor.fetchall()
+	cursor.close()
+	return render_template("teams.html", data=fetchdata)
 
 if __name__ == "__main__":
     app.run(debug=True)
