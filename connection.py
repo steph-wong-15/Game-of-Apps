@@ -15,8 +15,11 @@ mysql = MySQL(app)
 def searchPage():
     return render_template("home.html")
 
+@app.route('/students')
+def students():
+    return render_template("students.html")
 
-@app.route("/student_profile", methods=['GET', 'POST'])
+@app.route('/student_profile', methods=['GET', 'POST'])
 def search():
     id = request.form['id']
     cursor = mysql.get_db().cursor()
