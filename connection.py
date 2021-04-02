@@ -11,7 +11,6 @@ app.config['MYSQL_DATABASE_DB'] = 'goa'
 mysql = MySQL(app)
 
 
-
 @app.route("/")
 def homePage():
     return render_template("home.html")
@@ -26,6 +25,7 @@ def lessons():
     cursor.close()
     return render_template("lessons.html", lessons = fetchdata)
 
+
 @app.route('/lessonDetails/<string:ID>')
 def lessonDetails(ID):
     cursor = mysql.get_db().cursor()
@@ -35,6 +35,7 @@ def lessonDetails(ID):
     cursor.close()
     return render_template("lessonDetails.html", lessonData = lessonData)
 
+
 @app.route('/assignment/<string:lessonID>')
 def assignment(lessonID):
     cursor = mysql.get_db().cursor()
@@ -43,6 +44,16 @@ def assignment(lessonID):
     assignmentData = cursor.fetchall()
     cursor.close()
     return render_template("assignment.html", assignmentData = assignmentData)
+
+
+@app.route('/challenge/<string:lessonID>')
+def challenge(lessonID):
+    cursor = mysql.get_db().cursor()
+    string = "SELECT * FROM question WHERE ChallengeID IN (SELECT challengeID FROM challenge WHERE LessonID = %s);"
+    cursor.execute(string, lessonID)
+    questions = cursor.fetchall()
+    cursor.close()
+    return render_template("challenge.html", questions = questions)
 
 
 @app.route('/students')
