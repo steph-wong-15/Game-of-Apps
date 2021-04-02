@@ -35,6 +35,15 @@ def lessonDetails(ID):
     cursor.close()
     return render_template("lessonDetails.html", lessonData = lessonData)
 
+@app.route('/assignment/<string:lessonID>')
+def assignment(lessonID):
+    cursor = mysql.get_db().cursor()
+    string = "SELECT * FROM assignment WHERE LessonID = %s ;"
+    cursor.execute(string, lessonID)
+    assignmentData = cursor.fetchall()
+    cursor.close()
+    return render_template("assignment.html", assignmentData = assignmentData)
+
 
 @app.route('/students')
 def students():
