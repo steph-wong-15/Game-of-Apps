@@ -29,11 +29,35 @@
       </div>
     </nav>
 
-          <form action="/suggestion_profile" method = "POST">
+    <form action="/suggestionDetails" method = "POST">
       <p>Insert ID of suggestion: <input type = "text" name = "id" /></p>
       <p><input type = "submit" value = "Search" /></p>
+    </form>
 
-  </form>
+      <div>
+        <table class="table table-bordered border-primary">
+          <thead class="table-primary">
+            <tr>
+              <thead class="table-primary">
+                <tr>
+                  <th>SuggestionID</th>
+                  <th>Device</th>
+                  <th>Text</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for suggestion in suggestions %}
+            <tr>
+              <td>{{suggestion[0]}}</td><td>{{suggestion[1]}}</td><td>{{suggestion[2]}}</td>
+            </tr>     
+          </tbody>
+            {% endfor %}
+      </table>
+     </div>
+
+
+
+
 
 
     <!-- Optional JavaScript; choose one of the two! -->

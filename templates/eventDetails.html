@@ -29,7 +29,35 @@
       </div>
     </nav>
 
-      {{data}}
+    <div>
+      <table class="table table-bordered border-primary ">
+        <thead class="table-primary" >
+          <tr class="align-bottom">
+            <th>EventID</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>CohortID</th>
+          </tr>
+        </thead>
+        <tbody> 
+          {% for event in eventData %}
+          <tr>
+            <td>{{event[0]}}</td>
+            <td>{{event[1]}}</td>
+            <td>{{event[2]}}</td>
+            <td>{{event[3]}}</td>
+            <td>{{event[4]}}</td>
+      
+          </tr>
+        </tbody>
+        {% endfor %}
+      
+    
+    
+      </table>
+    </div>
+      
 
     <!-- Optional JavaScript; choose one of the two! -->
 

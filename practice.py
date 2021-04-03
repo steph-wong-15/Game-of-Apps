@@ -21,21 +21,31 @@ def students():
 
 @app.route('/events')
 def events():
-    return render_template("events.html")
+    cursor = mysql.get_db().cursor()
+    string = "SELECT * FROM goaEvent ORDER BY Date;"
+    cursor.execute(string)
+    fetchdata = cursor.fetchall()
+    cursor.close()
+    return render_template("events.html",events=fetchdata)
 
 @app.route('/suggestions')
 def suggestions():
-    return render_template("suggestions.html")
+    cursor = mysql.get_db().cursor()
+    string = "SELECT * FROM AnonymousSuggestions;"
+    cursor.execute(string)
+    fetchdata = cursor.fetchall()
+    cursor.close()
+    return render_template("suggestions.html",suggestions=fetchdata)
 
-@app.route('/event_profile',methods=['GET','POST'])
-def eventProfile():
+@app.route('/eventDetails',methods=['GET','POST'])
+def eventDetails():
     id = request.form['id']
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaEvent WHERE EventID = %s;"
     cursor.execute(string,(id))
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("event_profile.html",data=fetchdata)
+    return render_template("eventDetails.html",eventData=fetchdata)
 
 @app.route('/student_profile', methods=['GET', 'POST'])
 def studentProfile():
@@ -47,15 +57,15 @@ def studentProfile():
     cursor.close()
     return render_template("student_profile.html", data=fetchdata)
 
-@app.route('/suggestion_profile',methods=['GET','POST'])
-def suggestionProfile():
+@app.route('/suggestionDetails',methods=['GET','POST'])
+def suggestionDetails():
     id = request.form['id']
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM AnonymousSuggestions WHERE SuggestionID = %s;"
     cursor.execute(string,(id))
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("suggestion_profile.html",data=fetchdata)
+    return render_template("suggestionDetails.html",suggestionData=fetchdata)
 
 
 if __name__ == "__main__":

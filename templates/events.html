@@ -28,12 +28,33 @@
         </div>
       </div>
     </nav>
-
-          <form action="/event_profile" method = "POST">
+    <form action="/eventDetails" method = "POST">
       <p>Insert ID of event: <input type = "text" name = "id" /></p>
       <p><input type = "submit" value = "Search" /></p>
+    </form>
 
-  </form>
+    <div>
+      <table class="table table-bordered border-primary">
+        <thead class="table-primary">
+          <tr>
+            <th>EventID</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>CohortID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in events %}
+          <tr>
+            <td>{{event[0]}}</td><td>{{event[1]}}</td><td>{{event[2]}}<td>{{event[3]}}</td><td>{{event[4]}}</td>
+          </tr>     
+        </tbody>
+          {% endfor %}
+    </table>
+   </div>
+    
+
 
 
     <!-- Optional JavaScript; choose one of the two! -->

@@ -29,7 +29,30 @@
       </div>
     </nav>
 
-      {{data}}
+    <div>
+      <table class="table table-bordered border-primary ">
+        <thead class="table-primary" >
+          <tr class="align-bottom">
+            <th>SuggestionID</th>
+            <th>Device</th>
+            <th>Text</th>
+          </tr>
+        </thead>
+        <tbody> 
+          {% for suggestion in suggestionData %}
+          <tr>
+            <td>{{suggestion[0]}}</td>
+            <td>{{suggestion[1]}}</td>
+            <td>{{suggestion[2]}}</td>
+          </tr>
+        </tbody>
+        {% endfor %}
+      
+    
+    
+      </table>
+    </div>
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 
