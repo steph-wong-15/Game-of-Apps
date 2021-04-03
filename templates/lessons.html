@@ -27,10 +27,32 @@
       </div>
     </nav>
 
+        <div>
+  <table class="table table-bordered border-primary">
+    <thead class="table-primary">
+      <tr>
+        <th>Type</th>
+        <th>Lesson</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead >
+    <tbody>
       {% for lessons in lessons %}
-      <a class="nav-link" href="/lessonDetails/{{lessons[0]}}">{{lessons[2]}}</a>
-      <br>
-      {% endfor %}
+      <tr>
+        <td>{{lessons[1]}}</td>
+        <td>{{lessons[2]}}</td>
+        <td><button><a href={{lessons[7]}}>Slides</a></button></td>
+        <td><button><a href="/assignment/{{lessons[0]}}">Assignment</a></button></td>
+        <td><button><a href="/challenge/{{lessons[0]}}">Challenge</a></button></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+
+  </table>
+</div>
+
 
 
     <!-- Optional JavaScript; choose one of the two! -->
