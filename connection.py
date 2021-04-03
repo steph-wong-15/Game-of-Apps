@@ -56,20 +56,27 @@ def challenge(lessonID):
     return render_template("challenge.html", questions = questions)
 
 
-@app.route('/students')
-def students():
-    return render_template("students.html")
+
+@app.route('/students', methods=['GET', 'POST'])
+def studentTable():
+    cursor = mysql.get_db().cursor()
+    cursor.execute("SELECT * FROM goaUser")
+    fetchdata = cursor.fetchall()
+    cursor.close()
+    #print(fetchdata)
+    return render_template("students.html", student =fetchdata)
 
 
 @app.route('/student_profile', methods=['GET', 'POST'])
-def studentProfile():
+def studentSearch():
     id = request.form['id']
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaUser WHERE UserID = %s ;"
     cursor.execute(string, id)
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("student_profile.html", data=fetchdata)
+    return render_template("student_profile.html", student=fetchdata)
+
 
 @app.route('/teams',  methods=['GET', 'POST'])
 def teams():
