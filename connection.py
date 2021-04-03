@@ -32,11 +32,11 @@ def studentProfile():
 @app.route('/teams',  methods=['GET', 'POST'])
 def teams():
 	cursor = mysql.get_db().cursor()
-	string = "SELECT * FROM team;"
+	string = "SELECT * FROM team ORDER BY VotesReceived DESC;"
 	cursor.execute(string)
 	fetchdata = cursor.fetchall()
 	cursor.close()
-	return render_template("teams.html", data=fetchdata)
+	return render_template("teams.html", teams=fetchdata)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -27,8 +27,26 @@
       </div>
     </nav>
 
-      {{data}}
-
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Team ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Team Video</th>
+          <th scope="col">Voted Received</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for t in teams %}
+        <tr>
+          <td>{{t.0}}</td>
+          <td>{{t.1}}</td>
+          <td>{{t.2}}</td>
+          <td>{{t.3}}</td>
+        </tr>
+      {% endfor%}
+      </tbody>
+    </table>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
