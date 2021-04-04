@@ -8,8 +8,29 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-    <title>Game of Apps</title>
+
+    <title>Profile</title>
   </head>
+  <style>
+    td, th{
+    text-align:center; 
+    }
+
+    img {
+  
+    border:5px solid lightskyblue;
+    width:250px;
+    height:300px;
+    
+}
+
+
+.pic{
+  display: flex; 
+  justify-content: center;
+}
+  </style>
+
   <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
@@ -19,17 +40,70 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="#">Lessons</a>
+
+            <a class="nav-link active" aria-current="page" href="/lessons">Lessons</a>
             <a class="nav-link" href="/students">Students</a>
-            <a class="nav-link" href="#">Teams</a>
+            <a class="nav-link" href="/teams">Teams</a>
             <a class="nav-link" href="/events">Events</a>
             <a class="nav-link" href="/suggestions">Suggestions</a>
+
           </div>
         </div>
       </div>
     </nav>
 
-      {{data}}
+
+    
+    <!-- Images taken from: 
+    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK3Q7BhoMbLDHed_hHII9iS_SJvv0jTiFBRyoBAtlgWwSaQUjYvXN1RhWxKuc-nvItiFQEcwqYX2g&usqp=CAU
+
+    https://i.dlpng.com/static/png/1376086-png-svg-profile-png-512_512_preview.png
+
+    https://casasanjose.org/wp-content/uploads/2020/07/woman-avatar-profile-round-icon_24640-14048-1.jpg
+
+    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcKkr4jxij-WH9aUOAds3uX4JAwxcfaJz8vpr3OgG8uv7K0NLDa2_UZntJo_KrpPo9xXLm5-5peBA&usqp=CAU
+
+    https://www.shareicon.net/data/512x512/2016/07/26/802016_man_512x512.png
+    
+    -->
+    <div class="pic">
+      {% for s in student %}
+        <img src="{{s.5}}" >
+      {% endfor %}
+    </div>
+    
+    <div class="info-table">
+      <table class="table table-bordered border-primary ">
+        <thead class="table-primary" >
+          <tr class="align-bottom">
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Middle Initial</th>
+            <th>Last Name</th>
+            <th>School</th>
+            <th>Email</th>
+            <th>User Type</th>
+          </tr>
+        </thead>
+        <tbody> 
+          {% for s in student %}
+          <tr>
+            <td>{{s.0}}</td>
+            <td>{{s.1}}</td>
+            <td>{{s.2}}</td>
+            <td>{{s.3}}</td>
+            <td>{{s.4}}</td>
+            <td>{{s.6}}</td>
+            <td>{{s.7}}</td>
+          </tr>
+        </tbody>
+        {% endfor %}
+      
+    
+    
+      </table>
+    </div>
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -42,4 +116,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
     -->
   </body>
+
 </html>
+
