@@ -69,16 +69,6 @@ def lessons():
     return render_template("lessons.html", lessons=fetchdata)
 
 
-@app.route('/lessonDetails/<string:ID>')
-def lessonDetails(ID):
-    cursor = mysql.get_db().cursor()
-    string = "SELECT * FROM lesson WHERE LessonID = %s ;"
-    cursor.execute(string, ID)
-    lessonData = cursor.fetchall()
-    cursor.close()
-    return render_template("lessonDetails.html", lessonData=lessonData)
-
-
 @app.route('/assignment/<string:lessonID>')
 def assignment(lessonID):
     cursor = mysql.get_db().cursor()
