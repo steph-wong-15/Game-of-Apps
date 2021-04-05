@@ -22,7 +22,6 @@ def studentTable():
     cursor.execute("SELECT * FROM goaUser")
     fetchdata = cursor.fetchall()
     cursor.close()
-    #print(fetchdata)
     return render_template("students.html", student =fetchdata)
 
 @app.route('/student_profile', methods=['GET', 'POST'])
@@ -41,7 +40,7 @@ def studentSearch():
     cursor.execute(string, (id))
     badgeURL = cursor.fetchall()
     cursor.close()
-    
+
     # getting completed assignments
     id = request.form['id']
     cursor = mysql.get_db().cursor()
@@ -56,13 +55,9 @@ def studentSearch():
     string = "SELECT ChallengeID, Mark FROM ChallengeCompletes WHERE UserID = %s AND Progress = '100/100' ;"
     cursor.execute(string, (id))
     challengeComplete = cursor.fetchall()
-    cursor.close()
-    print(challengeComplete)
+    cursor.close() 
 
     return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete)
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
