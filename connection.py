@@ -1,3 +1,4 @@
+import random
 from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
 
@@ -95,7 +96,19 @@ def challenge(lessonID):
     cursor.execute(string, lessonID)
     questions = cursor.fetchall()
     cursor.close()
-    return render_template("challenge.html", questions=questions)
+
+    #randomize the challenge questions!
+    randomized = []
+    for question in questions:
+        temp = [question[2], question[3], question[4], question[5]]
+        random.shuffle(temp)
+        temp.append(question[6])
+        temp.append(question[0])
+        temp.append(question[1])
+        randomized.append(temp)
+
+    print(randomized)
+    return render_template("challenge.html", questions=randomized)
 
 
 @app.route('/challengeComplete/<string:challengeID>', methods=['GET', 'POST'])
@@ -106,6 +119,7 @@ def challengeComplete(challengeID):
     q = cursor.fetchall()
     cursor.close()
 
+    #check if they passed all the questions
     passed = True
     total = len(q)
     score = 0;

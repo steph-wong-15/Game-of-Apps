@@ -27,15 +27,14 @@
       </div>
     </nav>
 
-  <form action="/challengeComplete/{{questions[0][0]}}" name = "quiz" method = "POST">
+  <form action="/challengeComplete/{{questions[0][5]}}" name = "quiz" method = "POST">
     {% for question in questions %}
       <div>
-        <p><b>{{question[6]}}</b></p>
-        {{question[1]}}
-        <p><input type = "radio" name = "{{question[1]}}" value = "{{question[2]}}">{{question[2]}}</p>
-        <p><input type = "radio" name = "{{question[1]}}" value = "{{question[3]}}">{{question[3]}}</p>
-        <p><input type = "radio" name = "{{question[1]}}" value = "{{question[4]}}">{{question[4]}}</p>
-        <p><input type = "radio" name = "{{question[1]}}" value = "{{question[5]}}">{{question[5]}}</p>
+        <p><b>{{question[4]}}</b></p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[0]}}">{{question[0]}}</p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[1]}}">{{question[1]}}</p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[2]}}">{{question[2]}}</p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[3]}}">{{question[3]}}</p>
       </div>
         <br>
         <br>
