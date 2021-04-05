@@ -110,7 +110,6 @@ def studentTable():
     cursor.execute("SELECT * FROM goaUser")
     fetchdata = cursor.fetchall()
     cursor.close()
-    #print(fetchdata)
     return render_template("students.html", student =fetchdata)
 
 
@@ -122,8 +121,31 @@ def studentSearch():
     cursor.execute(string, id)
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("student_profile.html", student=fetchdata)
 
+    #getting badge
+    badgeURL = ''
+    cursor = mysql.get_db().cursor()
+    string = "SELECT B.EarnedURL FROM Badge B JOIN Earned E WHERE E.UserID = %s AND B.BadgeID = E.BadgeID;"
+    cursor.execute(string, (id))
+    badgeURL = cursor.fetchall()
+    cursor.close()
+
+    # getting completed assignments
+    id = request.form['id']
+    cursor = mysql.get_db().cursor()
+    string = "SELECT AssignmentID FROM AssignmentCompletes WHERE UserID = %s AND CompletionStatus = 'Complete' ;"
+    cursor.execute(string, (id))
+    assignComplete = cursor.fetchall()
+    cursor.close()
+
+    #getting completed challenges
+    id = request.form['id']
+    cursor = mysql.get_db().cursor()
+    string = "SELECT ChallengeID, Mark FROM ChallengeCompletes WHERE UserID = %s AND Progress = '100/100' ;"
+    cursor.execute(string, (id))
+    challengeComplete = cursor.fetchall()
+    cursor.close() 
+    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete)
 
 @app.route('/teams',  methods=['GET', 'POST'])
 def teams():
