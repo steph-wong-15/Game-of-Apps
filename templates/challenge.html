@@ -19,22 +19,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="/lessons">Lessons</a>
+            <a class="nav-link active" aria-current="page" href="#">Lessons</a>
             <a class="nav-link" href="/students">Students</a>
-            <a class="nav-link" href="/teams">Teams</a>
+            <a class="nav-link" href="#">Teams</a>
+            <a class="nav-link" href="/events">Events</a>
+            <a class="nav-link" href="/suggestions">Suggestions</a>
           </div>
         </div>
       </div>
     </nav>
 
-
-
-      {% for lessons in lessons %}
-      <a class="nav-link" href="/lessonDetails/{{lessons[0]}}">{{lessons[2]}}</a>
-      <br>
-      {% endfor %}
-
-
+  <form action="/challengeComplete/{{questions[0][5]}}" name = "quiz" method = "POST">
+    {% for question in questions %}
+      <div>
+        <p><b>{{question[4]}}</b></p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[0]}}">{{question[0]}}</p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[1]}}">{{question[1]}}</p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[2]}}">{{question[2]}}</p>
+        <p><input type = "radio" name = "{{question[6]}}" value = "{{question[3]}}">{{question[3]}}</p>
+      </div>
+        <br>
+        <br>
+        <br>
+    {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
