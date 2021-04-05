@@ -15,19 +15,49 @@
     text-align:center; 
     }
 
-    img {
+    .pic {
   
     border:5px solid lightskyblue;
     width:250px;
     height:300px;
     
-}
+    
+    }
 
+  .badge-box{
+  border:5px solid lightskyblue;
+  width:250px;
+  height:300px;
+  margin-right: 300px;
+  margin-left: 280px;
+  margin-top: -300px;
 
-.pic{
-  display: flex; 
-  justify-content: center;
-}
+  }
+
+  .assign-box{
+  border:5px solid lightskyblue;
+  width:250px;
+  height:300px;
+  margin-right: 600px;
+  margin-left: 580px;
+  margin-top: -300px;
+
+  }
+
+  .challenge-box{
+  border:5px solid lightskyblue;
+  width:250px;
+  height:300px;
+  margin-right: 900px;
+  margin-left: 880px;
+  margin-top: -300px;
+
+  }
+
+  h1{
+  font-size: 12pt;
+  text-align: center;
+  }
   </style>
   <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -61,9 +91,32 @@
     -->
     <div class="pic">
       {% for s in student %}
-        <img src="{{s.5}}" >
+        <img src="{{s.5}}" width="230px" height="280px">
       {% endfor %}
     </div>
+
+    <div class="badge-box">
+      <h1>Earned Badges</h1>
+      {% for b in badge %}
+      <img src="{{b.0}}" width="50px" height="100px" >
+      {% endfor %}
+    </div>
+
+    <div class="assign-box">
+      <h1>Completed Assignments</h1>
+      {% for a in assign %}
+      <p>Assignment #: {{a.0}}</p>
+      {% endfor %}
+    </div>
+
+    <div class="challenge-box">
+      <h1>Completed Challenges</h1>
+      {% for c in challenge %}
+      <p>Challenge #: {{c.0}}  Mark: {{c.1}}</p>
+      {% endfor %}
+    </div>
+
+    
     
     <div class="info-table">
       <table class="table table-bordered border-primary ">
@@ -76,8 +129,6 @@
             <th>School</th>
             <th>Email</th>
             <th>User Type</th>
-            <!-- <th>Team ID</th>
-            <th>Cohort ID</th> -->
           </tr>
         </thead>
         <tbody> 
@@ -90,8 +141,6 @@
             <td>{{s.4}}</td>
             <td>{{s.6}}</td>
             <td>{{s.7}}</td>
-            <!-- <td>{{s.8}}</td>
-            <td>{{s.9}}</td> -->
           </tr>
         </tbody>
         {% endfor %}
