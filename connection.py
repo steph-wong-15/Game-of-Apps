@@ -190,22 +190,34 @@ def studentSearch():
 
 @app.route('/teams', methods=['GET', 'POST'])
 def teams():
-    cursor = mysql.get_db().cursor()
-    string = "SELECT * FROM team ORDER BY VotesReceived DESC;"
-    cursor.execute(string)
-    fetchdata = cursor.fetchall()
-    cursor.close()
-    return render_template("teams.html", teams=fetchdata)
-    
-@app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])
-def deleteUser(userid):
-    # deleting user
-    goaUser.query.filter(goaUser.UserID == userid).delete()
-    db.session.commit()
-    flash('User Successfully Deleted!')
-    return redirect(url_for('studentTable'))
 
+	#get a list of all the teams (in descending order by number of votes received)
+	cursor = mysql.get_db().cursor()
+	string = "SELECT * FROM team ORDER BY VotesReceived DESC;"
+	cursor.execute(string)
+	teamsdata = cursor.fetchall()
+	cursor.close()
 
+	#get the team with the max number of votes
+	cursor = mysql.get_db().cursor()
+	string = "SELECT Name, VotesReceived FROM Team WHERE VotesReceived = (SELECT MAX(VotesReceived) FROM Team);"
+	cursor.execute(string)
+	winnersdata = cursor.fetchall()
+	cursor.close()
+
+	return render_template("teams.html", teams=teamsdata, winners=winnersdata)
+
+@app.route('/members/<string:teamID>')
+def members(teamID):
+
+	#get the members in each team
+	cursor = mysql.get_db().cursor()
+	string = "SELECT teamID, FirstName, LastName FROM goaUser WHERE teamID = %s;"
+	cursor.execute(string, teamID)
+	membersdata = cursor.fetchall()
+	cursor.close()
+
+	return render_template("members.html", members=membersdata)
 
 if __name__ == "__main__":
     app.run(debug=True)
