@@ -16,19 +16,64 @@
     text-align:center; 
     }
 
-    img {
+    .pic {
   
     border:5px solid lightskyblue;
     width:250px;
     height:300px;
     
-}
+    
+    }
+
+  .badge-box{
+  border:5px solid lightskyblue;
+  width:250px;
+  height:300px;
+  margin-right: 300px;
+  margin-left: 280px;
+  margin-top: -300px;
+  overflow:auto;
+
+  }
+
+  .assign-box{
+  border:5px solid lightskyblue;
+  width:250px;
+  height:300px;
+  margin-right: 600px;
+  margin-left: 580px;
+  margin-top: -300px;
+  overflow: auto;
+
+  }
+
+  .challenge-box{
+  border:5px solid lightskyblue;
+  width:250px;
+  height:300px;
+  margin-right: 900px;
+  margin-left: 880px;
+  margin-top: -300px;
+  overflow: auto;
+
+  }
+
+  .btn{
+   background-color:red; 
+  }
+
+  .del-btn{
+  display: flex;
+   justify-content: center;
+    
+  }
 
 
-.pic{
-  display: flex; 
-  justify-content: center;
-}
+
+  h1{
+  font-size: 12pt;
+  text-align: center;
+  }
   </style>
 
   <body>
@@ -70,9 +115,32 @@
     -->
     <div class="pic">
       {% for s in student %}
-        <img src="{{s.5}}" >
+        <img src="{{s.5}}" width="230px" height="280px">
       {% endfor %}
     </div>
+
+    <div class="badge-box">
+      <h1>Earned Badges</h1>
+      {% for b in badge %}
+      <img src="{{b.0}}" width="50px" height="100px" >
+      {% endfor %}
+    </div>
+
+    <div class="assign-box">
+      <h1>Completed Assignments</h1>
+      {% for a in assign %}
+      <p>Assignment #: {{a.0}}</p>
+      {% endfor %}
+    </div>
+
+    <div class="challenge-box">
+      <h1>Completed Challenges</h1>
+      {% for c in challenge %}
+      <p>Challenge #: {{c.0}}  Mark: {{c.1}} %</p>
+      {% endfor %}
+    </div>
+
+    
     
     <div class="info-table">
       <table class="table table-bordered border-primary ">
@@ -106,6 +174,13 @@
       </table>
     </div>
 
+    <div class="del-btn">
+      {% for s in student %}
+      <form method="post" action="/students/deleteUser/{{s.0}}" name = "delete" method = "POST">
+        <input class='btn' type="submit" value="Delete User">
+    </form>
+    {% endfor %}
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
