@@ -28,11 +28,43 @@
         </div>
       </div>
     </nav>
+
+    <h1>Search Events</h1>
     <form action="/eventDetails" method = "POST">
       <p>Insert ID of event: <input type = "text" name = "id" /></p>
       <p><input type = "submit" value = "Search" /></p>
     </form>
 
+    &nbsp;
+    &nbsp;
+
+    <h1>Oversea Events</h1>
+    <div>
+      <table class="table table-bordered border-primary">
+        <thead class="table-primary">
+          <tr>
+            <th>EventID</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>CohortID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for eventOC in eventsOC %}
+          <tr>
+            <td>{{eventOC[0]}}</td><td>{{eventOC[1]}}</td><td>{{eventOC[2]}}<td>{{eventOC[3]}}</td><td>{{eventOC[4]}}</td>
+          </tr>     
+        </tbody>
+          {% endfor %}
+    </table>
+   </div>
+
+   &nbsp;
+   &nbsp;
+
+   
+    <h1>Events List</h1>
     <div>
       <table class="table table-bordered border-primary">
         <thead class="table-primary">
@@ -46,7 +78,7 @@
         </thead>
         <tbody>
           {% for event in events %}
-          <tr class='clickable-row' data-href="http://www.google.com/">
+          <tr>
             <td>{{event[0]}}</td><td>{{event[1]}}</td><td>{{event[2]}}<td>{{event[3]}}</td><td>{{event[4]}}</td>
           </tr>     
         </tbody>
@@ -54,6 +86,7 @@
     </table>
    </div>
     
+   
 
 
 

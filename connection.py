@@ -1,13 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect,url_for
 from flaskext.mysql import MySQL
 
 app = Flask(__name__)
+ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+ app.config['MYSQL_DATABASE_USER'] = 'root'
+ app.config['MYSQL_DATABASE_PASSWORD'] = ''
+ app.config['MYSQL_DATABASE_DB'] = 'goa'
 
-
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'goa'
 
 
 mysql = MySQL(app)
@@ -26,17 +25,35 @@ def events():
     string = "SELECT * FROM goaEvent ORDER BY Date;"
     cursor.execute(string)
     fetchdata = cursor.fetchall()
+    string2 = "SELECT * FROM goaEvent A WHERE NOT EXISTS (SELECT Location FROM CanadianLocations B WHERE A.Location = B.Location);"
+    cursor.execute(string2)
+    fetchdata2 = cursor.fetchall()
     cursor.close()
-    return render_template("events.html",events=fetchdata)
+    return render_template("events.html",events=fetchdata,eventsOC=fetchdata2)
 
-@app.route('/suggestions')
+
+
+@app.route('/suggestions',methods=['POST','GET'])
 def suggestions():
-    cursor = mysql.get_db().cursor()
-    string = "SELECT * FROM AnonymousSuggestions;"
-    cursor.execute(string)
-    fetchdata = cursor.fetchall()
-    cursor.close()
-    return render_template("suggestions.html",suggestions=fetchdata)
+    if request.method == 'POST':
+        suggestion = request.form['SuggestionID']
+        device = request.form['Device']
+        text = request.form['Text']
+        conn = mysql.get_db()
+        cursor = mysql.get_db().cursor()
+        cursor.execute("INSERT INTO AnonymousSuggestions (SuggestionID,Device,Text) VALUES (%s,%s,%s)",(suggestion,device,text))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for('suggestions'))
+    else:
+        cursor = mysql.get_db().cursor()
+        string = "SELECT * FROM AnonymousSuggestions;"
+        cursor.execute(string)
+        fetchdata = cursor.fetchall()
+        cursor.close()
+        return render_template("suggestions.html",suggestions=fetchdata)
+
 
 @app.route('/eventDetails',methods=['GET','POST'])
 def eventDetails():

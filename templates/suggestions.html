@@ -29,11 +29,30 @@
       </div>
     </nav>
 
+    <h1>Search Suggestion</h1>
     <form action="/suggestionDetails" method = "POST">
       <p>Insert ID of suggestion: <input type = "text" name = "id" /></p>
       <p><input type = "submit" value = "Search" /></p>
     </form>
 
+&nbsp;
+&nbsp;
+    <h1>Insert Suggestions</h1>
+    <p>*Make sure not to insert duplicate SuggestionID & Only iOS and Android is Allowed for Device*</p>
+    <form method="post" action="/suggestions">
+      <label>SuggestionID:</label>
+      <input id="SuggestionID" name="SuggestionID" type="text"/>
+      <label>Device:</label>
+      <input id="Device" name="Device" type="text"/>
+      <label>Text:</label>
+      <input id="Text" name="Text" type="text"/>
+      <input type="submit"/>
+    </form>
+
+
+&nbsp;
+&nbsp;
+    <h1>Suggestions List</h1>
       <div>
         <table class="table table-bordered border-primary">
           <thead class="table-primary">
