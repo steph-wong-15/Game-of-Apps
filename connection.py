@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flaskext.mysql import MySQL
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -8,7 +9,28 @@ app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = 'goa'
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/goa'
+
+db = SQLAlchemy(app)
+
 mysql = MySQL(app)
+
+app.secret_key = 'secret'
+
+class goaUser(db.Model):
+    __tablename__ = 'goaUser'
+    UserID = db.Column(db.Integer, primary_key = True)
+    FirstName = db.Column(db.String(50))
+    LastName = db.Column(db.String(50))
+    School = db.Column(db.String(50))
+    ImageURL = db.Column(db.String)
+    Email = db.Column(db.String(100))
+    UserType = db.Column(db.String(50))
+    TeamID = db.Column(db.Integer)
+    CohortID = db.Column(db.Integer)
+    Password = db.Column(db.String(15))
+
 
 
 @app.route("/")
@@ -58,6 +80,16 @@ def studentSearch():
     cursor.close() 
 
     return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete)
+
+@app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])
+def deleteUser(userid):
+    # deleting user
+    goaUser.query.filter(goaUser.UserID == userid).delete()
+    db.session.commit()
+    flash('User Successfully Deleted!')
+    return redirect(url_for('studentTable'))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
