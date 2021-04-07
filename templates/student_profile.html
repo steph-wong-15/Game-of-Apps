@@ -32,6 +32,7 @@
   margin-right: 300px;
   margin-left: 280px;
   margin-top: -300px;
+  overflow:auto;
 
   }
 
@@ -42,6 +43,7 @@
   margin-right: 600px;
   margin-left: 580px;
   margin-top: -300px;
+  overflow: auto;
 
   }
 
@@ -52,8 +54,21 @@
   margin-right: 900px;
   margin-left: 880px;
   margin-top: -300px;
+  overflow: auto;
 
   }
+
+  .btn{
+   background-color:red; 
+  }
+
+  .del-btn{
+  display: flex;
+   justify-content: center;
+    
+  }
+
+
 
   h1{
   font-size: 12pt;
@@ -159,6 +174,13 @@
       </table>
     </div>
 
+    <div class="del-btn">
+      {% for s in student %}
+      <form method="post" action="/students/deleteUser/{{s.0}}" name = "delete" method = "POST">
+        <input class='btn' type="submit" value="Delete User">
+    </form>
+    {% endfor %}
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
