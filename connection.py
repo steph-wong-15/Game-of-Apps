@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/goa'
 db = SQLAlchemy(app)
 
 
+
 mysql = MySQL(app)
 
 app.secret_key = 'secret'
