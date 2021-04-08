@@ -228,6 +228,14 @@ def studentSearch():
     cursor.close() 
     return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete)
 
+@app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])
+def deleteUser(userid):
+    # deleting user
+    goaUser.query.filter(goaUser.UserID == userid).delete()
+    db.session.commit()
+    flash('User Successfully Deleted!')
+    return redirect(url_for('studentTable'))
+
 @app.route('/teams', methods=['GET', 'POST'])
 def teams():
 
