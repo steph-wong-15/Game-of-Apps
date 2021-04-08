@@ -34,8 +34,10 @@
   <table class="table table-bordered border-primary">
     <thead class="table-primary">
       <tr>
+        <th>Course</th>
         <th>Type</th>
         <th>Lesson</th>
+        <th></th>
         <th></th>
         <th></th>
         <th></th>
@@ -44,10 +46,12 @@
     <tbody>
       {% for lessons in lessons %}
       <tr>
+        <td>{{lessons[10]}}</td>
         <td>{{lessons[1]}}</td>
         <td>{{lessons[2]}}</td>
         <td><button><a href={{lessons[7]}}>Slides</a></button></td>
         <td><button><a href="/assignment/{{lessons[0]}}">Assignment</a></button></td>
+        <td><button><a href="/resource/{{lessons[0]}}">Resources</a></button></td>
         <td><button><a href="/challenge/{{lessons[0]}}">Challenge</a></button></td>
       </tr>
     </tbody>
