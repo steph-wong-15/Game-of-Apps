@@ -128,7 +128,7 @@ def suggestionDetails():
 @app.route('/lessons')
 def lessons():
     cursor = mysql.get_db().cursor()
-    string = "SELECT * FROM lesson ORDER BY weekNumber"
+    string = "SELECT * FROM lesson INNER JOIN course ON lesson.CourseID = course.CourseID ORDER BY lesson.weekNumber"
     cursor.execute(string)
     fetchdata = cursor.fetchall()
     cursor.close()
@@ -187,6 +187,15 @@ def challengeComplete(challengeID):
         else:
             score = score + 1
     return render_template("challengeComplete.html", passed = passed, score = score, total = total)
+
+@app.route('/resource/<string:lessonID>')
+def resource(lessonID):
+    cursor = mysql.get_db().cursor()
+    string = "SELECT * FROM resources WHERE LessonID = %s;"
+    cursor.execute(string, lessonID)
+    resources = cursor.fetchall()
+    cursor.close()
+    return render_template("resource.html", resources=resources)
 
 
 @app.route('/students', methods=['GET', 'POST'])

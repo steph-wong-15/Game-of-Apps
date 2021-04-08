@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-    <title>Lessons</title>
+    <title>Resource</title>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,8 +21,7 @@
           <div class="navbar-nav">
             <a class="nav-link active" aria-current="page" href="#">Lessons</a>
             <a class="nav-link" href="/students">Students</a>
-            <a class="nav-link" href="/teams">Teams</a>
-
+            <a class="nav-link" href="#">Teams</a>
             <a class="nav-link" href="/events">Events</a>
             <a class="nav-link" href="/suggestions">Suggestions</a>
           </div>
@@ -34,25 +33,15 @@
   <table class="table table-bordered border-primary">
     <thead class="table-primary">
       <tr>
-        <th>Course</th>
-        <th>Type</th>
-        <th>Lesson</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>Description</th>
+        <th>Link</th>
       </tr>
     </thead >
     <tbody>
-      {% for lessons in lessons %}
+      {% for resources in resources %}
       <tr>
-        <td>{{lessons[10]}}</td>
-        <td>{{lessons[1]}}</td>
-        <td>{{lessons[2]}}</td>
-        <td><button><a href={{lessons[7]}}>Slides</a></button></td>
-        <td><button><a href="/assignment/{{lessons[0]}}">Assignment</a></button></td>
-        <td><button><a href="/resource/{{lessons[0]}}">Resources</a></button></td>
-        <td><button><a href="/challenge/{{lessons[0]}}">Challenge</a></button></td>
+        <td>{{resources[2]}}</td>
+        <td><a href={{resources[1]}}>{{resources[1]}}</a></td>
       </tr>
     </tbody>
     {% endfor %}
