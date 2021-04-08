@@ -4,10 +4,12 @@ from flaskext.mysql import MySQL
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
  app.config['MYSQL_DATABASE_HOST'] = 'localhost'
  app.config['MYSQL_DATABASE_USER'] = 'root'
  app.config['MYSQL_DATABASE_PASSWORD'] = ''
  app.config['MYSQL_DATABASE_DB'] = 'goa'
+
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
