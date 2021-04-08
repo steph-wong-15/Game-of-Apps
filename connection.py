@@ -1,6 +1,3 @@
-
-
-
 import random
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flaskext.mysql import MySQL
@@ -39,7 +36,27 @@ class goaUser(db.Model):
 
 @app.route("/")
 def homePage():
-    return render_template("home.html")
+     return render_template("home.html")
+
+@app.route("/", methods=['POST','GET'])
+def login():
+    if request.method=="POST":
+        if 'email' in request.form and 'password' in request.form:
+            email = request.form["email"]
+            password = request.form["password"]
+            cursor = mysql.get_db().cursor()
+            cursor.execute("SELECT Email,Password FROM goaUser WHERE Email = %s and Password = %s",(email,password))
+            info = cursor.fetchone()
+            if info is not None:
+                return redirect(url_for('homePage')) 
+            else:
+                print("LOGIN FAILED, TRY AGAIN")
+                return redirect(url_for('homePage')) #should redirect to the 'login'
+                
+        
+
+    return render_template("login.html")
+    
 
 
 @app.route('/events')
@@ -59,6 +76,7 @@ def events():
 
 @app.route('/suggestions',methods=['POST','GET'])
 def suggestions():
+    # Inserting Data
     if request.method == 'POST':
         suggestion = request.form['SuggestionID']
         device = request.form['Device']
@@ -70,6 +88,7 @@ def suggestions():
         cursor.close()
         conn.close()
         return redirect(url_for('suggestions'))
+    # Searching the Data
     else:
         cursor = mysql.get_db().cursor()
         string = "SELECT * FROM AnonymousSuggestions;"
