@@ -208,14 +208,14 @@ def studentSearch(userID):
 
     # getting completed assignments
     cursor = mysql.get_db().cursor()
-    string = "SELECT AssignmentID FROM AssignmentCompletes WHERE UserID = %s AND CompletionStatus = 'Complete' ;"
+    string = "SELECT Title FROM lesson WHERE LessonID IN (SELECT LessonID FROM Assignment WHERE AssignmentID IN (SELECT AssignmentID FROM AssignmentCompletes WHERE UserID = %s AND CompletionStatus = 'Complete'));"
     cursor.execute(string, (userID))
     assignComplete = cursor.fetchall()
     cursor.close()
 
     # getting completed challenges
     cursor = mysql.get_db().cursor()
-    string = "SELECT ChallengeID, Mark FROM ChallengeCompletes WHERE UserID = %s AND Progress = '100/100' ;"
+    string = "SELECT lesson.Title, challengecompletes.Mark FROM lesson INNER JOIN challenge ON lesson.LessonID = challenge.LessonID INNER JOIN challengecompletes ON challenge.ChallengeID = challengecompletes.ChallengeID WHERE challengecompletes.UserID = %s;"
     cursor.execute(string, (userID))
     challengeComplete = cursor.fetchall()
     cursor.close()

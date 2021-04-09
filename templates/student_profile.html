@@ -39,13 +39,17 @@
    }
 
   .btn{
-   background-color:red; 
+   background-color:red;
   }
 
   .del-btn{
   display: flex;
    justify-content: center;
-    
+  }
+
+  .h1{
+    font-size: 25px;
+    font-weight: bold;
   }
 
   </style>
@@ -111,25 +115,28 @@
     <div class = 'school'>{{s.4}}</div>
     {% endfor %}
 
+    <br>
+    <br>
+    <br>
 
     <div class="badge-box">
-      <h1>Earned Badges</h1>
+      <h3>Earned Badges</h3>
       {% for b in badge %}
       <img src="{{b.0}}" width="50px" height="100px" >
       {% endfor %}
     </div>
 
     <div class="assign-box">
-      <h1>Completed Assignments</h1>
+      <h3>Completed Assignments</h3>
       {% for a in assign %}
-      <p>Assignment #: {{a.0}}</p>
+      <p>{{a.0}}</p>
       {% endfor %}
     </div>
 
     <div class="challenge-box">
-      <h1>Completed Challenges</h1>
+      <h3>Completed Challenges</h3>
       {% for c in challenge %}
-      <p>Challenge #: {{c.0}}  Mark: {{c.1}} %</p>
+      <p>{{c.0}}: {{c.1}} %</p>
       {% endfor %}
     </div>
 
