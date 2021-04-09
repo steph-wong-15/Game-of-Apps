@@ -77,13 +77,32 @@
   </style>
 
   <body>
-      <nav id = "mytable" class="navbar navbar-expand-lg navbar-light bg-light">
+
+  {% if signedIn == true %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/lessons">Lessons</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/student_profile/{{userID}}">Profile</a>
+            <a class="nav-link" href="/teams">Teams</a>
+            <a class="nav-link" href="/events">Events</a>
+            <a class="nav-link" href="/suggestions">Suggestions</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  {% else %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="/students">Students</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="collapse navbar-collapse">
           <div class="navbar-nav">
             <a class="nav-link" href="/mentor_suggestions">Suggestions</a>
             <a class="nav-link" href="/">Back to Login</a>
@@ -91,6 +110,8 @@
         </div>
       </div>
     </nav>
+  {% endif %}
+
 
 
     
@@ -167,6 +188,7 @@
       </table>
     </div>
 
+  {% if signedIn != true %}
     <div class="del-btn">
       {% for s in student %}
       <form method="post" action="/students/deleteUser/{{s.0}}" name = "delete" method = "POST">
@@ -174,6 +196,8 @@
     </form>
     {% endfor %}
     </div>
+  {% endif %}
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 

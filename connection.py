@@ -36,6 +36,8 @@ class goaUser(db.Model):
 
 @app.route("/", methods=['POST', 'GET'])
 def login():
+    global signedIn
+    signedIn = False
     if request.method == "POST":
         if 'email' in request.form and 'password' in request.form:
             email = request.form["email"]
@@ -48,6 +50,7 @@ def login():
                 global userID  # save the user who logged in in a global variable
                 userID = cursor.fetchall()
                 userID = userID[0][0]
+                signedIn = True
                 return redirect(url_for('lessons'))
             else:
                 print("LOGIN FAILED, TRY AGAIN")
@@ -65,7 +68,7 @@ def events():
     cursor.execute(string2)
     fetchdata2 = cursor.fetchall()
     cursor.close()
-    return render_template("events.html", events=fetchdata, eventsOC=fetchdata2)
+    return render_template("events.html", events=fetchdata, eventsOC=fetchdata2, userID = userID)
 
 
 @app.route('/suggestions', methods=['POST', 'GET'])
@@ -90,7 +93,7 @@ def suggestions():
         cursor.execute(string)
         fetchdata = cursor.fetchall()
         cursor.close()
-        return render_template("suggestions.html", suggestions=fetchdata)
+        return render_template("suggestions.html", suggestions=fetchdata, userID = userID)
 
 
 @app.route('/mentor_suggestions', methods=['POST', 'GET'])
@@ -105,13 +108,12 @@ def mentor_suggestions():
 
 @app.route('/lessons')
 def lessons():
-    print(userID)
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM lesson INNER JOIN course ON lesson.CourseID = course.CourseID ORDER BY lesson.weekNumber"
     cursor.execute(string)
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("lessons.html", lessons=fetchdata)
+    return render_template("lessons.html", lessons=fetchdata, userID = userID)
 
 
 @app.route('/assignment/<string:lessonID>')
@@ -121,7 +123,7 @@ def assignment(lessonID):
     cursor.execute(string, lessonID)
     assignmentData = cursor.fetchall()
     cursor.close()
-    return render_template("assignment.html", assignmentData=assignmentData)
+    return render_template("assignment.html", assignmentData=assignmentData, userID = userID)
 
 
 @app.route('/challenge/<string:lessonID>')
@@ -143,7 +145,7 @@ def challenge(lessonID):
         randomized.append(temp)
 
     print(randomized)
-    return render_template("challenge.html", questions=randomized)
+    return render_template("challenge.html", questions=randomized, userID = userID)
 
 
 @app.route('/challengeComplete/<string:challengeID>', methods=['GET', 'POST'])
@@ -165,7 +167,7 @@ def challengeComplete(challengeID):
             passed = False;
         else:
             score = score + 1
-    return render_template("challengeComplete.html", passed=passed, score=score, total=total)
+    return render_template("challengeComplete.html", passed=passed, score=score, total=total, userID = userID)
 
 
 @app.route('/resource/<string:lessonID>')
@@ -175,7 +177,7 @@ def resource(lessonID):
     cursor.execute(string, lessonID)
     resources = cursor.fetchall()
     cursor.close()
-    return render_template("resource.html", resources=resources)
+    return render_template("resource.html", resources=resources, userID = userID)
 
 
 @app.route('/students', methods=['GET', 'POST'])
@@ -189,6 +191,7 @@ def studentTable():
 
 @app.route('/student_profile/<string:userID>', methods=['GET', 'POST'])
 def studentSearch(userID):
+
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaUser WHERE UserID = %s ;"
     cursor.execute(string, userID)
@@ -216,7 +219,7 @@ def studentSearch(userID):
     cursor.execute(string, (userID))
     challengeComplete = cursor.fetchall()
     cursor.close()
-    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete)
+    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete, signedIn = signedIn)
 
 
 @app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])
@@ -244,7 +247,7 @@ def teams():
     winnersdata = cursor.fetchall()
     cursor.close()
 
-    return render_template("teams.html", teams=teamsdata, winners=winnersdata)
+    return render_template("teams.html", teams=teamsdata, winners=winnersdata, userID = userID)
 
 
 @app.route('/members/<string:teamID>')
@@ -256,7 +259,7 @@ def members(teamID):
     membersdata = cursor.fetchall()
     cursor.close()
 
-    return render_template("members.html", members=membersdata)
+    return render_template("members.html", members=membersdata, userID = userID)
 
 
 if __name__ == "__main__":
