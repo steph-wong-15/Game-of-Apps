@@ -10,22 +10,19 @@ app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = 'goa'
 
-
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/goa'
 
 db = SQLAlchemy(app)
 
-
-
 mysql = MySQL(app)
 
 app.secret_key = 'secret'
 
+
 class goaUser(db.Model):
     __tablename__ = 'goaUser'
-    UserID = db.Column(db.Integer, primary_key = True)
+    UserID = db.Column(db.Integer, primary_key=True)
     FirstName = db.Column(db.String(50))
     LastName = db.Column(db.String(50))
     School = db.Column(db.String(50))
@@ -37,30 +34,25 @@ class goaUser(db.Model):
     Password = db.Column(db.String(15))
 
 
-
-@app.route("/")
-def homePage():
-     return render_template("home.html")
-
-@app.route("/", methods=['POST','GET'])
+@app.route("/", methods=['POST', 'GET'])
 def login():
-    if request.method=="POST":
+    if request.method == "POST":
         if 'email' in request.form and 'password' in request.form:
             email = request.form["email"]
             password = request.form["password"]
             cursor = mysql.get_db().cursor()
-            cursor.execute("SELECT Email,Password FROM goaUser WHERE Email = %s and Password = %s",(email,password))
+            cursor.execute("SELECT Email,Password FROM goaUser WHERE Email = %s and Password = %s", (email, password))
             info = cursor.fetchone()
             if info is not None:
-                return redirect(url_for('homePage')) 
+                cursor.execute("SELECT UserID FROM goaUser WHERE Email = %s;", email)
+                global userID  # save the user who logged in in a global variable
+                userID = cursor.fetchall()
+                userID = userID[0][0]
+                return redirect(url_for('lessons'))
             else:
                 print("LOGIN FAILED, TRY AGAIN")
-                return redirect(url_for('homePage')) #should redirect to the 'login'
-                
-        
-
+                return redirect(url_for('login'))  # should redirect to the 'login'
     return render_template("login.html")
-    
 
 
 @app.route('/events')
@@ -73,12 +65,10 @@ def events():
     cursor.execute(string2)
     fetchdata2 = cursor.fetchall()
     cursor.close()
-    return render_template("events.html",events=fetchdata,eventsOC=fetchdata2)
+    return render_template("events.html", events=fetchdata, eventsOC=fetchdata2)
 
 
-
-
-@app.route('/suggestions',methods=['POST','GET'])
+@app.route('/suggestions', methods=['POST', 'GET'])
 def suggestions():
     # Inserting Data
     if request.method == 'POST':
@@ -87,7 +77,8 @@ def suggestions():
         text = request.form['Text']
         conn = mysql.get_db()
         cursor = mysql.get_db().cursor()
-        cursor.execute("INSERT INTO AnonymousSuggestions (SuggestionID,Device,Text) VALUES (%s,%s,%s)",(suggestion,device,text))
+        cursor.execute("INSERT INTO AnonymousSuggestions (SuggestionID,Device,Text) VALUES (%s,%s,%s)",
+                       (suggestion, device, text))
         conn.commit()
         cursor.close()
         conn.close()
@@ -99,34 +90,22 @@ def suggestions():
         cursor.execute(string)
         fetchdata = cursor.fetchall()
         cursor.close()
-        return render_template("suggestions.html",suggestions=fetchdata)
+        return render_template("suggestions.html", suggestions=fetchdata)
 
 
-
-@app.route('/eventDetails', methods=['GET', 'POST'])
-def eventDetails():
-    id = request.form['id']
+@app.route('/mentor_suggestions', methods=['POST', 'GET'])
+def mentor_suggestions():
     cursor = mysql.get_db().cursor()
-    string = "SELECT * FROM goaEvent WHERE EventID = %s;"
-    cursor.execute(string, (id))
+    string = "SELECT * FROM AnonymousSuggestions;"
+    cursor.execute(string)
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("eventDetails.html", eventData=fetchdata)
-
-
-@app.route('/suggestionDetails', methods=['GET', 'POST'])
-def suggestionDetails():
-    id = request.form['id']
-    cursor = mysql.get_db().cursor()
-    string = "SELECT * FROM AnonymousSuggestions WHERE SuggestionID = %s;"
-    cursor.execute(string, (id))
-    fetchdata = cursor.fetchall()
-    cursor.close()
-    return render_template("suggestionDetails.html", suggestionData=fetchdata)
+    return render_template("mentor_suggestions.html", suggestions=fetchdata)
 
 
 @app.route('/lessons')
 def lessons():
+    print(userID)
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM lesson INNER JOIN course ON lesson.CourseID = course.CourseID ORDER BY lesson.weekNumber"
     cursor.execute(string)
@@ -153,7 +132,7 @@ def challenge(lessonID):
     questions = cursor.fetchall()
     cursor.close()
 
-    #randomize the challenge questions!
+    # randomize the challenge questions!
     randomized = []
     for question in questions:
         temp = [question[2], question[3], question[4], question[5]]
@@ -175,7 +154,7 @@ def challengeComplete(challengeID):
     q = cursor.fetchall()
     cursor.close()
 
-    #check if they passed all the questions
+    # check if they passed all the questions
     passed = True
     total = len(q)
     score = 0;
@@ -186,7 +165,8 @@ def challengeComplete(challengeID):
             passed = False;
         else:
             score = score + 1
-    return render_template("challengeComplete.html", passed = passed, score = score, total = total)
+    return render_template("challengeComplete.html", passed=passed, score=score, total=total)
+
 
 @app.route('/resource/<string:lessonID>')
 def resource(lessonID):
@@ -204,42 +184,40 @@ def studentTable():
     cursor.execute("SELECT * FROM goaUser")
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("students.html", student =fetchdata)
+    return render_template("students.html", student=fetchdata)
 
 
-@app.route('/student_profile', methods=['GET', 'POST'])
-def studentSearch():
-    id = request.form['id']
+@app.route('/student_profile/<string:userID>', methods=['GET', 'POST'])
+def studentSearch(userID):
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaUser WHERE UserID = %s ;"
-    cursor.execute(string, id)
+    cursor.execute(string, userID)
     fetchdata = cursor.fetchall()
     cursor.close()
 
-    #getting badge
+    # getting badge
     badgeURL = ''
     cursor = mysql.get_db().cursor()
     string = "SELECT B.EarnedURL FROM Badge B JOIN Earned E WHERE E.UserID = %s AND B.BadgeID = E.BadgeID;"
-    cursor.execute(string, (id))
+    cursor.execute(string, (userID))
     badgeURL = cursor.fetchall()
     cursor.close()
 
     # getting completed assignments
-    id = request.form['id']
     cursor = mysql.get_db().cursor()
     string = "SELECT AssignmentID FROM AssignmentCompletes WHERE UserID = %s AND CompletionStatus = 'Complete' ;"
-    cursor.execute(string, (id))
+    cursor.execute(string, (userID))
     assignComplete = cursor.fetchall()
     cursor.close()
 
-    #getting completed challenges
-    id = request.form['id']
+    # getting completed challenges
     cursor = mysql.get_db().cursor()
     string = "SELECT ChallengeID, Mark FROM ChallengeCompletes WHERE UserID = %s AND Progress = '100/100' ;"
-    cursor.execute(string, (id))
+    cursor.execute(string, (userID))
     challengeComplete = cursor.fetchall()
-    cursor.close() 
+    cursor.close()
     return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete)
+
 
 @app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])
 def deleteUser(userid):
@@ -249,36 +227,37 @@ def deleteUser(userid):
     flash('User Successfully Deleted!')
     return redirect(url_for('studentTable'))
 
+
 @app.route('/teams', methods=['GET', 'POST'])
 def teams():
+    # get a list of all the teams (in descending order by number of votes received)
+    cursor = mysql.get_db().cursor()
+    string = "SELECT * FROM team ORDER BY VotesReceived DESC;"
+    cursor.execute(string)
+    teamsdata = cursor.fetchall()
+    cursor.close()
 
-	#get a list of all the teams (in descending order by number of votes received)
-	cursor = mysql.get_db().cursor()
-	string = "SELECT * FROM team ORDER BY VotesReceived DESC;"
-	cursor.execute(string)
-	teamsdata = cursor.fetchall()
-	cursor.close()
+    # get the team with the max number of votes
+    cursor = mysql.get_db().cursor()
+    string = "SELECT Name, VotesReceived FROM Team WHERE VotesReceived = (SELECT MAX(VotesReceived) FROM Team);"
+    cursor.execute(string)
+    winnersdata = cursor.fetchall()
+    cursor.close()
 
-	#get the team with the max number of votes
-	cursor = mysql.get_db().cursor()
-	string = "SELECT Name, VotesReceived FROM Team WHERE VotesReceived = (SELECT MAX(VotesReceived) FROM Team);"
-	cursor.execute(string)
-	winnersdata = cursor.fetchall()
-	cursor.close()
+    return render_template("teams.html", teams=teamsdata, winners=winnersdata)
 
-	return render_template("teams.html", teams=teamsdata, winners=winnersdata)
 
 @app.route('/members/<string:teamID>')
 def members(teamID):
+    # get the members in each team
+    cursor = mysql.get_db().cursor()
+    string = "SELECT teamID, FirstName, LastName FROM goaUser WHERE teamID = %s;"
+    cursor.execute(string, teamID)
+    membersdata = cursor.fetchall()
+    cursor.close()
 
-	#get the members in each team
-	cursor = mysql.get_db().cursor()
-	string = "SELECT teamID, FirstName, LastName FROM goaUser WHERE teamID = %s;"
-	cursor.execute(string, teamID)
-	membersdata = cursor.fetchall()
-	cursor.close()
+    return render_template("members.html", members=membersdata)
 
-	return render_template("members.html", members=membersdata)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -13,14 +13,12 @@
   <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">Game of Apps</a>
+        <a class="navbar-brand" href="/lessons">Lessons</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="/lessons">Lessons</a>
-            <a class="nav-link" href="/students">Students</a>
             <a class="nav-link" href="/teams">Teams</a>
             <a class="nav-link" href="/events">Events</a>
             <a class="nav-link" href="/suggestions">Suggestions</a>
@@ -29,16 +27,8 @@
       </div>
     </nav>
 
-    <h1>Search Suggestion</h1>
-    <form action="/suggestionDetails" method = "POST">
-      <p>Insert ID of suggestion: <input type = "text" name = "id" /></p>
-      <p><input type = "submit" value = "Search" /></p>
-    </form>
-
-&nbsp;
-&nbsp;
     <h1>Insert Suggestions</h1>
-    <p>*Make sure not to insert duplicate SuggestionID & Only iOS and Android is Allowed for Device*</p>
+    <p>Only iOS and Android is Allowed for Device*</p>
     <form method="post" action="/suggestions">
       <label>SuggestionID:</label>
       <input id="SuggestionID" name="SuggestionID" type="text"/>
@@ -49,8 +39,6 @@
       <input type="submit"/>
     </form>
 
-
-&nbsp;
 &nbsp;
     <h1>Suggestions List</h1>
       <div>
@@ -68,7 +56,7 @@
             {% for suggestion in suggestions %}
             <tr>
               <td>{{suggestion[0]}}</td><td>{{suggestion[1]}}</td><td>{{suggestion[2]}}</td>
-            </tr>     
+            </tr>
           </tbody>
             {% endfor %}
       </table>
