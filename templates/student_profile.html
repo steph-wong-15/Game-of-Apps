@@ -138,8 +138,16 @@
       {% for s in student %}
       <form method="post" action="/students/deleteUser/{{s.0}}" name = "delete" method = "POST">
         <input class='btn' type="submit" value="Delete User">
-    </form>
-    {% endfor %}
+      </form>
+      {% endfor %}
+    </div>
+
+  {% else %}
+      <div class="del-btn">
+      {% for s in student %}
+      <button><a href="/">Log Out</a></button>
+      </form>
+      {% endfor %}
     </div>
   {% endif %}
 
