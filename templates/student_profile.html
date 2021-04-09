@@ -12,51 +12,31 @@
     <title>Profile</title>
   </head>
   <style>
-    td, th{
-    text-align:center; 
-    }
 
     .pic {
-  
-    border:5px solid lightskyblue;
-    width:250px;
-    height:300px;
-    
-    
+      border:5px solid lightskyblue;
+      width:250px;
+      height:300px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-  .badge-box{
-  border:5px solid lightskyblue;
-  width:250px;
-  height:300px;
-  margin-right: 300px;
-  margin-left: 280px;
-  margin-top: -300px;
-  overflow:auto;
+   .name{
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+   }
 
-  }
+   .email{
+      text-align: center;
+      font-size: 25px;
+   }
 
-  .assign-box{
-  border:5px solid lightskyblue;
-  width:250px;
-  height:300px;
-  margin-right: 600px;
-  margin-left: 580px;
-  margin-top: -300px;
-  overflow: auto;
-
-  }
-
-  .challenge-box{
-  border:5px solid lightskyblue;
-  width:250px;
-  height:300px;
-  margin-right: 900px;
-  margin-left: 880px;
-  margin-top: -300px;
-  overflow: auto;
-
-  }
+   .school{
+      text-align: center;
+      font-size: 25px;
+   }
 
   .btn{
    background-color:red; 
@@ -68,12 +48,6 @@
     
   }
 
-
-
-  h1{
-  font-size: 12pt;
-  text-align: center;
-  }
   </style>
 
   <body>
@@ -111,9 +85,6 @@
       </div>
     </nav>
   {% endif %}
-
-
-
     
     <!-- Images taken from: 
     https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK3Q7BhoMbLDHed_hHII9iS_SJvv0jTiFBRyoBAtlgWwSaQUjYvXN1RhWxKuc-nvItiFQEcwqYX2g&usqp=CAU
@@ -132,6 +103,14 @@
         <img src="{{s.5}}" width="230px" height="280px">
       {% endfor %}
     </div>
+
+
+    {% for s in student %}
+    <div class = 'name'>{{s.1}} {{s.2}}. {{s.3}}</div>
+    <div class = 'email'>{{s.6}}</div>
+    <div class = 'school'>{{s.4}}</div>
+    {% endfor %}
+
 
     <div class="badge-box">
       <h1>Earned Badges</h1>
@@ -152,40 +131,6 @@
       {% for c in challenge %}
       <p>Challenge #: {{c.0}}  Mark: {{c.1}} %</p>
       {% endfor %}
-    </div>
-
-    
-    
-    <div class="info-table">
-      <table class="table table-bordered border-primary ">
-        <thead class="table-primary" >
-          <tr class="align-bottom">
-            <th>User ID</th>
-            <th>First Name</th>
-            <th>Middle Initial</th>
-            <th>Last Name</th>
-            <th>School</th>
-            <th>Email</th>
-            <th>User Type</th>
-          </tr>
-        </thead>
-        <tbody> 
-          {% for s in student %}
-          <tr>
-            <td>{{s.0}}</td>
-            <td>{{s.1}}</td>
-            <td>{{s.2}}</td>
-            <td>{{s.3}}</td>
-            <td>{{s.4}}</td>
-            <td>{{s.6}}</td>
-            <td>{{s.7}}</td>
-          </tr>
-        </tbody>
-        {% endfor %}
-      
-    
-    
-      </table>
     </div>
 
   {% if signedIn != true %}

@@ -219,7 +219,7 @@ def studentSearch(userID):
     cursor.execute(string, (userID))
     challengeComplete = cursor.fetchall()
     cursor.close()
-    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete, signedIn = signedIn)
+    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete, signedIn = signedIn, userID = userID)
 
 
 @app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])

@@ -9,6 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
     <title>Challenge</title>
+    <style>
+      p {
+        margin: 20px 0px 0px 20px;
+      }
+    </style>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,6 +33,7 @@
       </div>
     </nav>
 
+  <p>
   <form action="/challengeComplete/{{questions[0][5]}}" name = "quiz" method = "POST">
     {% for question in questions %}
       <div>
@@ -43,6 +49,7 @@
     {% endfor %}
         <input type="submit" value="Submit">
     </form>
+      </p>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
