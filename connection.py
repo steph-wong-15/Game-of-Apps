@@ -243,6 +243,7 @@ def challengeComplete(challengeID):
                            (userID, badgeID))
             conn.commit()
             cursor.execute("SELECT EarnedURL From badge WHERE BadgeID IN (SELECT BadgeID From Challenge WHERE ChallengeID = %s)", challengeID)
+            badgeURL = cursor.fetchall()[0]
             cursor.close()
             conn.close()
 
