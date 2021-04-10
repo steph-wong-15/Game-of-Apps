@@ -103,10 +103,13 @@ def suggestions():
 
         device = request.form['Device']
         text = request.form['Text']
+        conn = mysql.get_db()
         cursor = mysql.get_db().cursor()
         cursor.execute("INSERT INTO AnonymousSuggestions (SuggestionID,Device,Text) VALUES (%s,%s,%s)",
                        (suggestion, device, text))
+        conn.commit()
         cursor.close()
+        conn.close()
         return render_template("suggestions.html",userID=userID, suggestionInserted = suggestionInserted)
 
     # Searching the Data
