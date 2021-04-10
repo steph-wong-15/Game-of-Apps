@@ -152,10 +152,18 @@
   {% else %}
       <div class="del-btn">
       {% for s in student %}
+      <button><a href="/update">Change Password</a></button>
+      </form>
+      {% endfor %}
+    </div>
+    <br>
+      <div class="del-btn">
+      {% for s in student %}
       <button><a href="/">Log Out</a></button>
       </form>
       {% endfor %}
     </div>
+
   {% endif %}
 
 

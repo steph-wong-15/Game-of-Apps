@@ -8,10 +8,10 @@ app = Flask(__name__)
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'goa'
+app.config['MYSQL_DATABASE_DB'] = 'goa-2'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/goa'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/goa-2'
 
 db = SQLAlchemy(app)
 
@@ -69,12 +69,13 @@ def login():
 @app.route('/update', methods=['POST', 'GET'])
 def updatePassword():
     if request.method == 'POST':
-        userID = request.form['userID']
+        #userID = request.form['userID']
         password = request.form['password']
         user = goaUser.query.filter(goaUser.UserID == userID).one()
         user.Password = password
         db.session.commit()
-        return render_template("login.html")
+        return redirect(url_for("studentSearch", userID = userID))
+        
     else:
         return render_template("update.html")
 
