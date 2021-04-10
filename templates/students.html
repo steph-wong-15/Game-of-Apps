@@ -14,10 +14,14 @@
     h2{
       text-align: center;
     }
+
+    td { border: 3px solid black; padding: 1em; }
+    tr { border: 3px solid black; padding: 1em; }
   </style>
 
+
   <body>
-      <nav id = "mytable" class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav id = "mytable" class="navbar navbar-expand-lg navbar-light bg-yellow" style="background-color:#FFCB77;" >
       <div class="container-fluid">
         <a class="navbar-brand" href="/students">Students</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,19 +45,21 @@
   </div>
 </form>
 
-  <div>
-  <table class="table table-bordered border-primary">
+&nbsp;
+<h1 style="padding-left:70px;"> Student List</h1>
+<div class="container">
+  <table class="table table-bordered border-primary" >
     <thead class="table-primary">
       <tr>
-        <th>User ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th></th>
+        <th style="background-color:#F79E6B;">User ID</th>
+        <th style="background-color:#F79E6B;">First Name</th>
+        <th style="background-color:#F79E6B;">Last Name</th>
+        <th style="background-color:#F79E6B;"></th>
       </tr>
     </thead >
     <tbody> 
       {% for s in student %}
-      <tr>
+      <tr">
         <td>{{s.0}}</td>
         <td>{{s.1}}</td>
         <td>{{s.3}}</td>
