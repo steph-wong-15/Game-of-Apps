@@ -85,27 +85,33 @@ def events():
 
 @app.route('/suggestions', methods=['POST', 'GET'])
 def suggestions():
+    suggestionInserted = False;
+
     # Inserting Data
     if request.method == 'POST':
-        suggestion = request.form['SuggestionID']
+
+        suggestionInserted = True;
+
+        cursor = mysql.get_db().cursor()
+        cursor.execute("SELECT MAX(SuggestionID) FROM AnonymousSuggestions")
+
+        suggestion = cursor.fetchall()
+        suggestion = int(suggestion[0][0])
+        suggestion = suggestion + 1
+
+        print(suggestion)
+
         device = request.form['Device']
         text = request.form['Text']
-        conn = mysql.get_db()
         cursor = mysql.get_db().cursor()
         cursor.execute("INSERT INTO AnonymousSuggestions (SuggestionID,Device,Text) VALUES (%s,%s,%s)",
                        (suggestion, device, text))
-        conn.commit()
         cursor.close()
-        conn.close()
-        return redirect(url_for('suggestions'))
+        return render_template("suggestions.html",userID=userID, suggestionInserted = suggestionInserted)
+
     # Searching the Data
     else:
-        cursor = mysql.get_db().cursor()
-        string = "SELECT * FROM AnonymousSuggestions;"
-        cursor.execute(string)
-        fetchdata = cursor.fetchall()
-        cursor.close()
-        return render_template("suggestions.html", suggestions=fetchdata, userID = userID)
+        return render_template("suggestions.html", userID = userID, suggestionInserted = suggestionInserted)
 
 
 @app.route('/mentor_suggestions', methods=['POST', 'GET'])
@@ -203,7 +209,6 @@ def studentTable():
 
 @app.route('/student_profile/<string:userID>', methods=['GET', 'POST'])
 def studentSearch(userID):
-
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaUser WHERE UserID = %s ;"
     cursor.execute(string, userID)

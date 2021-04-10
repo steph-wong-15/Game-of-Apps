@@ -9,6 +9,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
     <title>Suggestions</title>
+    <style>
+        h1 {text-align: center;}
+        form {text-align: center;}
+
+        textarea {
+            width: 600px;
+            height: 150px;
+          }
+
+    </style>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,40 +38,30 @@
       </div>
     </nav>
 
-    <h1>Insert Suggestions</h1>
-    <p>Only iOS and Android is Allowed for Device*</p>
-    <form method="post" action="/suggestions">
-      <label>SuggestionID:</label>
-      <input id="SuggestionID" name="SuggestionID" type="text"/>
-      <label>Device:</label>
-      <input id="Device" name="Device" type="text"/>
-      <label>Text:</label>
-      <input id="Text" name="Text" type="text"/>
-      <input type="submit"/>
-    </form>
 
-&nbsp;
-    <h1>Suggestions List</h1>
-      <div>
-        <table class="table table-bordered border-primary">
-          <thead class="table-primary">
-            <tr>
-              <thead class="table-primary">
-                <tr>
-                  <th>SuggestionID</th>
-                  <th>Device</th>
-                  <th>Text</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for suggestion in suggestions %}
-            <tr>
-              <td>{{suggestion[0]}}</td><td>{{suggestion[1]}}</td><td>{{suggestion[2]}}</td>
-            </tr>
-          </tbody>
-            {% endfor %}
-      </table>
-     </div>
+    <h1>Insert Suggestions</h1>
+      <br>
+
+    <form method="post" action="/suggestions">
+      <label>What device is this suggestion for? (Android or iOS):</label>
+      <br>
+      <input id="Device" name="Device" type="Text" size="25"/>
+      <br>
+      <br>
+      <br>
+      <label>Your suggestion:</label>
+      <br>
+      <textarea id="Text" name="Text" type="text" size="100">
+      </textarea>
+      <br>
+      <input type="submit"/>
+      <br>
+      <br>
+
+      {% if suggestionInserted == true %}
+        Your suggestions greatly helps us improve our program, thank you!
+      {% endif %}
+    </form>
 
 
 
