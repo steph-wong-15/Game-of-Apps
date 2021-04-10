@@ -43,6 +43,9 @@
           <img src="{{badgeURL.0}}" width="230px" height="280px">
           <br>
           You earned a new badge!
+        {% else %}
+          <br>
+          You already have the badge for this challenge!
         {% endif %}
       {% else %}
         You scored {{score}}/{{total}}, try again next time!

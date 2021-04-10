@@ -202,6 +202,7 @@ def challengeComplete(challengeID):
     # Update challenge mark
     cursor = mysql.get_db().cursor()
     cursor.execute("SELECT Mark FROM challengecompletes WHERE ChallengeID = %s and UserID = %s", (challengeID, userID))
+    cursor.close()
     mark = cursor.fetchone()
     #add mark if doesn't already exist
     if mark is not None:
@@ -213,11 +214,11 @@ def challengeComplete(challengeID):
     #if exists: update if new score is higher
     else:
         conn = mysql.get_db()
+        cursor = mysql.get_db().cursor()
         cursor.execute("INSERT INTO challengecompletes (ChallengeID, UserID, Mark, Progress) VALUES (%s,%s,%s,%s)",
                        (challengeID, userID, newMark, '100/100'))
         conn.commit()
-        conn.close()
-    cursor.close()
+        cursor.close()
 
     # ADD BADGE IF FULL MARKS
     alreadyEarned = False
@@ -243,6 +244,7 @@ def challengeComplete(challengeID):
                            (userID, badgeID))
             conn.commit()
             cursor.execute("SELECT EarnedURL From badge WHERE BadgeID IN (SELECT BadgeID From Challenge WHERE ChallengeID = %s)", challengeID)
+            badgeURL = cursor.fetchall()[0]
             cursor.close()
             conn.close()
 
