@@ -13,35 +13,31 @@
       <style>
         h1 {text-align: center;}
         form {text-align: center;}
-        mentor {text-align: center;}
-        a {text-align: center;}
       </style>
   </head>
   <body>
   <br>
   <br>
     <h1>
-        Welcome to Game of Apps!
+       Change Password
     </h1>
-    <br>
-    <form action="/" method="POST">
-        <h2></h2>Email:
+
+    <form action="/update"  method="POST">
+        Enter Your Student ID: 
         <br>
-            <input type="email" name="email" placeholder="type your email address"><br>
-            Password:<br>
-            <input type="password" name="password" placeholder="type your password"><br>
-            <a class="nav-link" href="/update">Change Password</a>
+        <input id="userID" type="userID" name="userID" placeholder="Type ID">
         <br>
-        
-        <input type="submit" value="LOGIN">
+        Password: 
+        <br>
+        <input id="password" type="password" name="password" placeholder="Type new password">
+        <br>
+        <br>
+        <input type="submit" value="DONE">
     </form>
+    
 
 
-      {% if attempted == true %}
-        Login failed, try again!
-      {% endif %}
-
-    <mentor><a class="nav-link" href="/students">Continue as mentor</a></mentor>
+    
 
 
     
