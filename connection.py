@@ -69,7 +69,6 @@ def login():
 @app.route('/update', methods=['POST', 'GET'])
 def updatePassword():
     if request.method == 'POST':
-        #userID = request.form['userID']
         password = request.form['password']
         user = goaUser.query.filter(goaUser.UserID == userID).one()
         user.Password = password
