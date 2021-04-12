@@ -280,6 +280,8 @@ def studentTable():
 
 @app.route('/student_profile/<string:userID>', methods=['GET', 'POST'])
 def studentSearch(userID):
+    if (userID == '000000'):
+        userID = request.form["id"]
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM goaUser WHERE UserID = %s ;"
     cursor.execute(string, userID)
