@@ -35,6 +35,14 @@ class goaUser(db.Model):
     Password = db.Column(db.String(15))
 
 
+class completedChallenges(db.Model):
+    __tablename__ = 'challengecompletes'
+    ChallengeID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer, primary_key=True)
+    Mark = db.Column(db.Integer)
+    Progress = db.Column(db.String(50))
+
+
 @app.route("/", methods=['POST', 'GET'])
 def login():
     global signedIn
@@ -58,18 +66,19 @@ def login():
                 return redirect(url_for('login'))  # should redirect to the 'login'
     return render_template("login.html")
 
-@app.route('/update', methods=['POST', 'GET'])
 
+@app.route('/update', methods=['POST', 'GET'])
 def updatePassword():
     if request.method == 'POST':
-        userID = request.form['userID']
         password = request.form['password']
         user = goaUser.query.filter(goaUser.UserID == userID).one()
         user.Password = password
         db.session.commit()
-        return render_template("login.html")
+        return redirect(url_for("studentSearch", userID = userID))
+        
     else:
         return render_template("update.html")
+
 
 @app.route('/events')
 def events():
@@ -81,7 +90,7 @@ def events():
     cursor.execute(string2)
     fetchdata2 = cursor.fetchall()
     cursor.close()
-    return render_template("events.html", events=fetchdata, eventsOC=fetchdata2, userID = userID)
+    return render_template("events.html", events=fetchdata, eventsOC=fetchdata2, userID=userID)
 
 
 @app.route('/suggestions', methods=['POST', 'GET'])
@@ -111,12 +120,12 @@ def suggestions():
         conn.commit()
         cursor.close()
         conn.close()
-        return render_template("suggestions.html",userID=userID, suggestionInserted = suggestionInserted)
+        return render_template("suggestions.html", userID=userID, suggestionInserted=suggestionInserted)
 
     # Searching the Data
     else:
+        return render_template("suggestions.html", userID=userID, suggestionInserted=suggestionInserted)
 
-        return render_template("suggestions.html", userID = userID, suggestionInserted = suggestionInserted)
 
 
 @app.route('/mentor_suggestions', methods=['POST', 'GET'])
@@ -139,7 +148,7 @@ def lessons():
     cursor.execute(string)
     fetchdata = cursor.fetchall()
     cursor.close()
-    return render_template("lessons.html", lessons=fetchdata, userID = userID)
+    return render_template("lessons.html", lessons=fetchdata, userID=userID)
 
 
 @app.route('/assignment/<string:lessonID>')
@@ -149,7 +158,7 @@ def assignment(lessonID):
     cursor.execute(string, lessonID)
     assignmentData = cursor.fetchall()
     cursor.close()
-    return render_template("assignment.html", assignmentData=assignmentData, userID = userID)
+    return render_template("assignment.html", assignmentData=assignmentData, userID=userID)
 
 
 @app.route('/challenge/<string:lessonID>')
@@ -170,8 +179,7 @@ def challenge(lessonID):
         temp.append(question[1])
         randomized.append(temp)
 
-    print(randomized)
-    return render_template("challenge.html", questions=randomized, userID = userID)
+    return render_template("challenge.html", questions=randomized, userID=userID)
 
 
 @app.route('/challengeComplete/<string:challengeID>', methods=['GET', 'POST'])
@@ -187,13 +195,68 @@ def challengeComplete(challengeID):
     total = len(q)
     score = 0
     for question in q:
-        print(question[1])
         answer = request.form.get(str(question[1]))
         if answer != question[2]:
             passed = False
         else:
             score = score + 1
-    return render_template("challengeComplete.html", passed=passed, score=score, total=total, userID = userID)
+
+    newMark = int(score / total * 100)
+
+    # Update challenge mark
+    cursor = mysql.get_db().cursor()
+    cursor.execute("SELECT Mark FROM challengecompletes WHERE ChallengeID = %s and UserID = %s", (challengeID, userID))
+    cursor.close()
+    mark = cursor.fetchone()
+    #add mark if doesn't already exist
+    if mark is not None:
+        mark = int(mark[0])
+        if newMark > mark:
+            progress = completedChallenges.query.filter((completedChallenges.ChallengeID == challengeID) & (completedChallenges.UserID == userID)).one()
+            progress.Mark = newMark
+            db.session.commit()
+    #if exists: update if new score is higher
+    else:
+        conn = mysql.get_db()
+        cursor = mysql.get_db().cursor()
+        cursor.execute("INSERT INTO challengecompletes (ChallengeID, UserID, Mark, Progress) VALUES (%s,%s,%s,%s)",
+                       (challengeID, userID, newMark, '100/100'))
+        conn.commit()
+        cursor.close()
+
+    # ADD BADGE IF FULL MARKS
+    alreadyEarned = False
+    badgeURL = "null"
+    if passed:
+        #get badge ID
+        cursor = mysql.get_db().cursor()
+        cursor.execute("SELECT BadgeID FROM challenge WHERE ChallengeID = %s;", challengeID)
+        cursor.close()
+        badgeID = cursor.fetchone()[0]
+
+        #check if user already has badge
+        cursor = mysql.get_db().cursor()
+        cursor.execute("SELECT BadgeID, UserID FROM earned WHERE BadgeID = %s and UserID = %s", (badgeID, userID))
+        ifExists = cursor.fetchone()
+        cursor.close()
+
+        #if they don't add the badge
+        if ifExists is None:
+            conn = mysql.get_db()
+            cursor = mysql.get_db().cursor()
+            cursor.execute("INSERT INTO earned (UserID, BadgeID) VALUES (%s,%s)",
+                           (userID, badgeID))
+            conn.commit()
+            cursor.execute("SELECT EarnedURL From badge WHERE BadgeID IN (SELECT BadgeID From Challenge WHERE ChallengeID = %s)", challengeID)
+            badgeURL = cursor.fetchall()[0]
+            cursor.close()
+            conn.close()
+
+        else:
+            alreadyEarned = True
+
+    return render_template("challengeComplete.html", passed=passed, score=score, total=total, userID=userID,
+                           alreadyEarned=alreadyEarned, badgeURL = badgeURL)
 
 
 @app.route('/resource/<string:lessonID>')
@@ -203,7 +266,7 @@ def resource(lessonID):
     cursor.execute(string, lessonID)
     resources = cursor.fetchall()
     cursor.close()
-    return render_template("resource.html", resources=resources, userID = userID)
+    return render_template("resource.html", resources=resources, userID=userID)
 
 
 @app.route('/students', methods=['GET', 'POST'])
@@ -244,7 +307,8 @@ def studentSearch(userID):
     cursor.execute(string, (userID))
     challengeComplete = cursor.fetchall()
     cursor.close()
-    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete, challenge=challengeComplete, signedIn = signedIn, userID = userID)
+    return render_template("student_profile.html", student=fetchdata, badge=badgeURL, assign=assignComplete,
+                           challenge=challengeComplete, signedIn=signedIn, userID=userID)
 
 
 @app.route('/students/deleteUser/<string:userid>', methods=['GET', 'POST'])
@@ -272,7 +336,7 @@ def teams():
     winnersdata = cursor.fetchall()
     cursor.close()
 
-    return render_template("teams.html", teams=teamsdata, winners=winnersdata, userID = userID)
+    return render_template("teams.html", teams=teamsdata, winners=winnersdata, userID=userID)
 
 
 @app.route('/members/<string:teamID>')
@@ -284,7 +348,7 @@ def members(teamID):
     membersdata = cursor.fetchall()
     cursor.close()
 
-    return render_template("members.html", members=membersdata, userID = userID)
+    return render_template("members.html", members=membersdata, userID=userID)
 
 
 if __name__ == "__main__":

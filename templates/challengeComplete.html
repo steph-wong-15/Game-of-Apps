@@ -11,7 +11,9 @@
     <title>Complete!</title>
     <style>
       p {
-        margin: 20px 0px 0px 20px;
+        text-align: center;
+        font-size: large;
+        font-weight: bold;
       }
     </style>
   </head>
@@ -35,10 +37,22 @@
       <p>
 
       {% if passed == true %}
-        Congrats! You scored {{score}}/{{total}}
+        <congrats>Congrats! You scored {{score}}/{{total}}</congrats>
+        {% if alreadyEarned != true %}
+          <br>
+          <img src="{{badgeURL.0}}" width="230px" height="280px">
+          <br>
+          You earned a new badge!
+        {% else %}
+          <br>
+          You already have the badge for this challenge!
+        {% endif %}
       {% else %}
         You scored {{score}}/{{total}}, try again next time!
       {% endif %}
+      <br>
+      <br>
+      <button><a href="/lessons">Back to Lessons</a></button>
 
       </p>
 

@@ -74,7 +74,7 @@
       </div>
     </nav>
   {% else %}
-  <nav class="navbar navbar-expand-lg navbar-light bg-yellow" style="background-color:#FFCB77;" >
+    <nav class="navbar navbar-expand-lg navbar-light bg-yellow" style="background-color:#FFCB77;" >
       <div class="container-fluid">
         <a class="navbar-brand" href="/students">Students</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,10 +152,18 @@
   {% else %}
       <div class="del-btn">
       {% for s in student %}
+      <button><a href="/update">Change Password</a></button>
+      </form>
+      {% endfor %}
+    </div>
+    <br>
+      <div class="del-btn">
+      {% for s in student %}
       <button><a href="/">Log Out</a></button>
       </form>
       {% endfor %}
     </div>
+
   {% endif %}
 
 
