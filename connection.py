@@ -5,10 +5,14 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+# app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+# app.config['MYSQL_DATABASE_USER'] = 'root'
+# app.config['MYSQL_DATABASE_PASSWORD'] = ''
+# app.config['MYSQL_DATABASE_DB'] = 'goa'
+app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'goa'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Atjdwkd0124@'
+app.config['MYSQL_DATABASE_DB'] = 'Flask'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/goa'
@@ -126,14 +130,18 @@ def suggestions():
         return render_template("suggestions.html", userID=userID, suggestionInserted=suggestionInserted)
 
 
+
 @app.route('/mentor_suggestions', methods=['POST', 'GET'])
 def mentor_suggestions():
     cursor = mysql.get_db().cursor()
     string = "SELECT * FROM AnonymousSuggestions;"
     cursor.execute(string)
     fetchdata = cursor.fetchall()
+    string2 = "SELECT Device,COUNT(*) AS 'count' FROM AnonymousSuggestions GROUP BY Device;"
+    cursor.execute(string2)
+    fetchdata2 = cursor.fetchall()
     cursor.close()
-    return render_template("mentor_suggestions.html", suggestions=fetchdata)
+    return render_template("mentor_suggestions.html", suggestions=fetchdata,device_suggestions=fetchdata2)
 
 
 @app.route('/lessons')

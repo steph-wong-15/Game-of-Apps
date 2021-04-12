@@ -51,6 +51,28 @@
             {% endfor %}
       </table>
      </div>
+  &nbsp;
+    <h1 style="padding-left:70px;"># of Suggestions on Each Device</h1>
+      <div class="container">
+        <table class="table table-bordered border-primary">
+          <thead class="table-primary">
+            <tr>
+              <thead class="table-primary">
+                <tr>
+                  <th style="background-color:#F79E6B;">Device</th>
+                  <th style="background-color:#F79E6B;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for devicesuggestion in device_suggestions %}
+            <tr>
+              <td>{{devicesuggestion[0]}}</td><td>{{devicesuggestion[1]}}</td>
+            </tr>
+          </tbody>
+            {% endfor %}
+      </table>
+     </div>
+
 
 
 
