@@ -3,7 +3,7 @@
 
 ## Installation
 
-### Run
+## Run
 
 ## References
 
